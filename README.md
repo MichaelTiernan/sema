@@ -15,14 +15,26 @@ If one script wants to wait until another script has executed some steps, the fo
 ~~~sh
 #!/bin/sh
 
-echo A.sh started
+echo "${0} started"
+
+# Create a semaphore and call it 'S1'
 sema -c S1
+
+# Now launch a child task.
 ./B.sh &
-echo A.sh more work
-echo waiting for B.sh to finish
+
+# Pretend we're doing work...
+echo "${0} more work"
+echo "waiting for B.sh to finish"
+
+# Ask to wait on the semaphore we created before.
 sema -w S1
-echo B.sh finished execution
-echo A.sh do more work
+
+# If we arrive here, the semaphore said the wait is over.
+echo "B.sh finished execution"
+echo "${0} do more work"
+
+# Always clean up after yourself.
 # cleanup semaphores
 sema -d S1
 ~~~
@@ -31,8 +43,14 @@ sema -d S1
 ~~~sh
 #!/bin/sh
 
-echo Hello from B.sh
+# From the begining of this script's tasks, "A"
+# is waiting on the semephore it created and will
+# patiently wait until this script finishes.
+echo "Hello from B.sh"
 sleep 5
+
+# Now, this script asks the semaphone to raise meaning
+# "I'm done" letting the next train run.
 sema -r S1
 echo Bye bye from B.sh
 ~~~
