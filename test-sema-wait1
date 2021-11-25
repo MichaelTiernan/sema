@@ -1,0 +1,61 @@
+#!/bin/ksh
+
+PREFIX=/usr/local/bin
+TGT=sema
+
+if [ -e ${TGT} ] ; then
+	if [ ${TGT} -nt ${PREFIX}/${TGT} ] ; then
+		toTest=./${TGT}
+	else
+		toTest=${PREFIX}/${TGT}
+	fi
+elif [ -e ${PREFIX}/${TGT}  ] ; then
+	toTest=${PREFIX}/${TGT}
+else
+	print "No executable version of ${TGT} was found"
+	exit -1
+fi
+
+TGT=${toTest}
+print "Testing against ${TGT}"
+
+# set -x
+
+${TGT} -c test1 0
+${TGT} -c test2 0
+
+for i in {0..12} ; do
+	( 
+		${TGT} -v test1
+		print "test 1 Job ${i} is PID ${$}."
+		${TGT} -w test1
+		print "test 1 released ${i} and running ${$}."
+		${TGT} -r test2
+	) &
+
+	(
+		${TGT} -v test2
+		print "test 2 Job ${i} is PID ${$}."
+		${TGT} -w test2
+		print "test 2 released ${i} and running ${$}."
+		${TGT} -r test1
+	) &
+done
+
+let ranMax=2
+let ranMin=1
+let ranRange=${ranMax}-${ranMin}+1
+let whoGoesFirst=${RANDOM}
+let whoGoesFirst*=${ranRange}
+let whoGoesFirst/=32767
+let whoGoesFirst+=${ranMin}
+
+echo "Who goes First is ${whoGoesFirst}"
+( sleep 5 ; sema -r test${whoGoesFirst} ) &
+
+echo "Waiting for jobs."
+wait
+
+set +x
+
+

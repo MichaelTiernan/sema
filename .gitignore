@@ -1,4 +1,6 @@
 .gitignore
 
+myTgt
+
 sema
 sema.o

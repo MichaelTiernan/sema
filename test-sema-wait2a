@@ -1,0 +1,48 @@
+#!/bin/ksh
+
+# set -x
+
+TMPDIR=/run/user/10999
+TMPDIR=.
+
+reportFile=${TMPDIR}/myTgt
+
+# echo 20000 > ${reportFile}
+
+# sema -c reportFile 0
+
+function get_nextReport
+{
+	# sema -w reportFile
+
+	foo=$(< ${reportFile} )
+	((foo+=1))
+	echo ${foo} > ${reportFile}
+	sync
+	# echo "get_nextReport returns ${foo}"
+
+	# sema -r reportFile
+
+	echo ${foo}
+}
+
+for i in {1..10} ; do
+	( 
+		sleep $((3*${RANDOM}/32767+2))
+		thisReport=$(get_nextReport)
+		printf "Generating report number R%06d\n" ${thisReport}
+	) &
+done
+
+# ( sleep 4 ; sema -r reportFile ) &
+
+echo "Waiting for jobs."
+wait
+
+print "All background tasks done. Cleaning up."
+
+# sema -d reportFile
+
+# /bin/rm -f ${tgtFile}
+
+set +x
