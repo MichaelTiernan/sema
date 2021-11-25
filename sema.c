@@ -101,7 +101,7 @@ static int sem_value(const char *sem_name)
 
     if (sp != NULL){
         if (sem_getvalue(sp, &value) == 0){
-            printf("%d\n", value);
+            printf("% d\n", value);
             rv = SEMA_SUCCESS;
         }
         sem_close(sp);
@@ -193,14 +193,14 @@ int main(int argc, char* argv[])
         if (rv == SEMA_ERROR){
             char buf[BUF_SIZE];
             snprintf(buf, sizeof(buf),
-                     "Error operating on given semaphore:[%s]", sem_name);
+                     "MCT:Error operating on given semaphore:[%s]", sem_name);
             perror(buf);
         }
 	
     }
     else{
         printf("\nSYNOPSIS\n sema -c|-d|-r|-w name [initial value]\n\nDESCRIPTION\n"
-               " -c name [initial value]\n  Create a semaphore with given value. Default: 0\n"
+               " -c name [initial value]\n  Create a semaphore with given non-negative value. Default: 0\n"
                " -d name\n  Delete the given semaphore.\n"
                " -r name\n  Raise the given semaphore.\n"
                " -v name\n  Print the current value of the given semaphore.\n"

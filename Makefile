@@ -1,13 +1,15 @@
 # Makefile to build sema
 #
 
+PREFIX=/usr/local
+
 CXX = gcc
 LIBS = -lpthread
 CPP_FLAGS = -g -Wall -Wextra -pedantic -pthread
 EXEC = sema
 SRC = sema.c
-EXEC_INSTALL_DIR = /usr/bin
-DOC_INSTALL_DIR = /usr/share/doc/sema
+EXEC_INSTALL_DIR = $(PREFIX)/bin
+DOC_INSTALL_DIR = $(PREFIX)/share/doc/sema
 
 OBJS = $(SRC:.c=.o)
 DOC_OBJS = AUTHORS INSTALL LICENSE README
@@ -18,10 +20,8 @@ DOC_OBJS = AUTHORS INSTALL LICENSE README
 .PHONY: all
 all: $(EXEC)
 
-
 $(EXEC): $(OBJS)
 	$(CXX)  -o $(EXEC) $(LIBS) -pthread $(OBJS)
-
 
 install: all
 	install $(EXEC) $(EXEC_INSTALL_DIR)
