@@ -7,9 +7,9 @@ CXX = gcc
 LIBS = -lpthread
 CPP_FLAGS = -g -Wall -Wextra -pedantic -pthread
 EXEC = sema
-SRC = sema.c
+SRC = $(EXEC).c
 EXEC_INSTALL_DIR = $(PREFIX)/bin
-DOC_INSTALL_DIR = $(PREFIX)/share/doc/sema
+DOC_INSTALL_DIR = $(PREFIX)/share/doc/$(EXEC)
 
 OBJS = $(SRC:.c=.o)
 DOC_OBJS = AUTHORS INSTALL LICENSE README
@@ -28,19 +28,19 @@ install: all
 	install -d $(DOC_INSTALL_DIR)
 	for f in $(DOC_OBJS); \
 	do \
-	 install $${f} $(DOC_INSTALL_DIR); \
+		install $${f} $(DOC_INSTALL_DIR); \
 	done
 
 test: all
-	$(EXEC) -c sema-test;\
-	$(EXEC) -r sema-test;\
-	$(EXEC) -w sema-test;\
-	$(EXEC) -d sema-test;\
+	$(EXEC) -c $(EXEC)-test;\
+	$(EXEC) -r $(EXEC)-test;\
+	$(EXEC) -w $(EXEC)-test;\
+	$(EXEC) -d $(EXEC)-test;\
 	if [ $$? -ne 0 ];\
 		then echo "Unit test failed";\
 	else \
 		echo "All test(s) passed";\
-	fi 	
+	fi
 
 .PHONY: clean
 clean:

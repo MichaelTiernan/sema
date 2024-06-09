@@ -1,0 +1,38 @@
+#!/bin/ksh
+
+# set -x
+
+tgtFile=myTgt
+
+echo 20000 > ${tgtFile}
+
+sema -c singleSema 0
+
+for i in {0..20} ; do
+	( 
+		# sema -v targetSemaW
+		sema -w singleSema
+		foo=$(< ${tgtFile} )
+		((foo+=10))
+		echo ${foo} > ${tgtFile}
+		echo "Set target file to ${foo}"
+		sema -r singleSema
+	) &
+
+	(
+		# sema -v targetSemaR
+		sema -w singleSema
+		foo=$(< ${tgtFile} )
+		((foo-=10))
+		echo ${foo} > ${tgtFile}
+		echo "Set target file to ${foo}"
+		sema -r singleSema
+	) &
+done
+
+echo "Waiting for jobs."
+wait
+
+sema -d singleSema
+
+set +x

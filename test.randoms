@@ -1,0 +1,18 @@
+#!/bin/ksh
+
+let ranMax=3
+let ranMin=2
+let ranRange=${ranMax}-${ranMin}+1
+
+for i in {1..12} ; do
+	let ran=${RANDOM}	# 0-->32767
+		# printf "Random value: %d (%x)\n" ${RANDOM} ${RANDOM}
+	let ran*=${ranRange}
+		# printf "Ran value: %d (%x)\n" ${ran} ${ran}
+	let ran/=32767
+		# printf "Ran value: %d (%x)\n" ${ran} ${ran}
+	let ran+=${ranMin}
+		printf "Ran value: %d (%x)\n" ${ran} ${ran}
+	# set +v
+	# set +x
+done
