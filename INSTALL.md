@@ -1,0 +1,11 @@
+## REQUIREMENTS:
+ * A POSIX system
+ * GNU make 3.82 or later. Might work with earlier versions but not tested.
+ * pthreads library 2.10 or later. Again, might work with earlier versions too.
+
+## BUILD:
+Type `make` at the top level directory and it should build the executable named `sema`.
+
+## INSTALL:
+Either make install or copy the executable `sema` to `/usr/local/bin` or `/usr/bin`.
+
