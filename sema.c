@@ -13,14 +13,13 @@
 #define SEMA_BLOCKED	1
 #define SEMA_ARG_ERROR	2
 
-#define SEMA_SHARED	1
-#define BUF_SIZE	1024
-
+#define SEMA_SHARED 1
+#define AKAY 1024
+#define BUF_SIZE AKAY
 
 enum action_t {
 	NONE, CREATE, DELETE, RAISE, WAIT, VALUE
 };
-
 
 /*
  * Creates a named semaphore
@@ -63,6 +62,7 @@ static int	sem_delete (const char *sem_name)
 		sem_close (sp);
 	}
 	return rv;
+
 }
 
 static int	sem_inc (const char *sem_name)
